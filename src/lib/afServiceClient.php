@@ -51,7 +51,7 @@ class afServiceClient
             ))
         );
         $request  = $this->client->createRequest($parameters, "project/create", 'POST');
-        $response = $this->client->send($request);
+        $response = $this->client->send($request, true);
         return $response;
     }
 }
