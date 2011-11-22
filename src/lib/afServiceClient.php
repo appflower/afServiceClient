@@ -37,13 +37,9 @@ class afServiceClient
      */
     function CreateProject($projectName, $email, $adminPersonName)
     {
-        /**
-         * @todo - slug should be builded by appFlowerService
-         */
         $parameters = array(
             'payload' => json_encode(array(
                 'name' => $projectName,
-                'slug' => $projectName,
                 'user' => array(
                     'name' => $adminPersonName,
                     'email'=> $email
@@ -51,6 +47,21 @@ class afServiceClient
             ))
         );
         $request  = $this->client->createRequest($parameters, "project/create", 'POST');
+        $response = $this->client->send($request, true);
+        return $response;
+    }
+    
+    /**
+     * @return afRESTWSResponse
+     */
+    function CheckSlug($projectName)
+    {
+        $parameters = array(
+            'payload' => json_encode(array(
+                'name' => $projectName
+            ))
+        );
+        $request  = $this->client->createRequest($parameters, "project/checkSlug", 'POST');
         $response = $this->client->send($request, true);
         return $response;
     }
