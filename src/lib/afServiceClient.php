@@ -21,13 +21,17 @@ class afServiceClient
      * @param type $url
      * @return afServiceClient
      */
-    static function create($url)
+    static function create($url, $username = null, $password = null)
     {
         if ($url == '') {
             throw new afServiceException('You must provide some URL');
         }
         $client = new afRESTWSClient();
         $client->setBaseUrl($url);
+        
+        if ($username && $password) {
+            $client->setHttpAuthCredentials($username, $password);
+        }
         
         return new afServiceClient($client);
     }
