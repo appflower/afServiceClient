@@ -24,7 +24,7 @@ class afServiceClient
     static function create($url, $username = null, $password = null)
     {
         if ($url == '') {
-            throw new afServiceException('You must provide some URL');
+            throw new Exception('You must provide some URL');
         }
         $client = new afRESTWSClient();
         $client->setBaseUrl($url);
@@ -39,17 +39,26 @@ class afServiceClient
     /**
      * @return afRESTWSResponse
      */
-    function CreateProject($projectName, $email, $adminPersonName)
+    function CreateProject($projectName, $email, $adminPersonName, $username = null, $passwordClear = null)
     {
+        $user = array(
+            'name' => $adminPersonName,
+            'email'=> $email
+        );
+        if ($username) {
+            $user['username'] = $username;
+        }
+        if ($passwordClear) {
+            $user['password'] = $passwordClear;
+        }
         $parameters = array(
             'payload' => json_encode(array(
                 'name' => $projectName,
-                'user' => array(
-                    'name' => $adminPersonName,
-                    'email'=> $email
-                )
+                'slug' => $projectName,
+                'user' => $user
             ))
         );
+        
         $request  = $this->client->createRequest($parameters, "project/create", 'POST');
         $response = $this->client->send($request, true);
         return $response;
