@@ -78,5 +78,23 @@ class afServiceClient
         $response = $this->client->send($request, true);
         return $response;
     }
+    
+    /**
+     * @return afRESTWSResponse
+     */
+    function DoProject($projectName, $action)
+    {
+        if(in_array($action,array('activate','deactivate','remove')))
+        {
+            $parameters = array(
+                'payload' => json_encode(array(
+                    'name' => $projectName
+                ))
+            );
+            $request  = $this->client->createRequest($parameters, "project/".$action, 'POST');
+            $response = $this->client->send($request, true);
+            return $response;
+        }
+    }
 }
 ?>
